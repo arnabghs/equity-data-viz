@@ -1,0 +1,22 @@
+#chart-area {
+	border: 1px solid black
+}
+
+.axis-label {
+	font-size: 25px;
+	text-anchor: middle;
+}
+
+.y {
+	transform: rotate(-90deg);
+}
+
+.x-axis text {
+	font-weight: bold;
+}
+
+.close {
+	stroke: blue;
+	stroke-width: 3px;
+	fill: none
+}
