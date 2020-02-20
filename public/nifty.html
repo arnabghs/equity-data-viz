@@ -6,16 +6,29 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Equity</title>
+
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/style.css">
+	<link href="https://cdn.rawgit.com/RasmusFonseca/d3RangeSlider/master/d3RangeSlider.css" rel="stylesheet" />
+
 </head>
 
 <body>
+	<script src="https://cdn.rawgit.com/RasmusFonseca/d3RangeSlider/master/d3RangeSlider.js"></script>
+
 	<script src="js/lodash.min.js"></script>
 	<script src="js/d3.v5.min.js"></script>
 	<script src="js/nifty.js"></script>
 
 	<div class="container">
+		<div class="heading-bar">
+			<div id="slider-container"></div>
+			<div id="range-label"></div>
+			<label for="SMA-period">SMA period:</label>
+			<input type="text" id="SMA-period" name="SMA-period">
+			<label for="SMA-offset">SMA Offset:</label>
+			<input type="text" id="SMA-offset" name="SMA-offset">
+		</div>
 		<div class="row">
 			<div id="chart-area"><svg></svg></div>
 		</div>
