@@ -151,6 +151,88 @@ const updateByPeriodAndOffset = function(quotes) {
   });
 };
 
+const createTable = function(transacs) {
+  // create table
+  let table = d3
+    .select("#transac-table")
+    .append("table")
+    .attr("class", "table");
+
+  let columns = [
+    { head: "Buy_Date", cl: "buy-date" },
+    { head: "Buying_Price", cl: "buy-pr" },
+    { head: "Sell_Date", cl: "sell-date" },
+    { head: "Selling_Price", cl: "sell-pr" },
+    { head: "Net_Profit", cl: "np" }
+  ];
+
+  // create table header
+  table
+		.append("thead")
+		.attr("class","thead-light")
+    .append("tr")
+    .selectAll("th")
+    .data(columns)
+    .enter()
+    .append("th")
+    .attr("class", x => x.cl)
+    .text(x => x.head);
+
+  // create table body
+  table
+    .append("tbody")
+    .selectAll("tr")
+    .data(transacs)
+    .enter()
+    .append("tr")
+    .selectAll("td")
+    .data(function(row, i) {
+      return Object.values(getTransactionSummary(row));
+    })
+    .enter()
+    .append("td")
+    .text(function(d) {
+      return d;
+    });
+};
+
+const getTransactionSummary = function(transaction) {
+  const { buy, sell } = transaction;
+  const income = sell.Close - buy.Close;
+  return {
+    Buy_Date: buy.Date,
+    Buying_Price: Math.round(buy.Close),
+    Sell_Date: sell.Date,
+    Selling_Price: Math.round(sell.Close),
+    Net_Profit: Math.round(income)
+  };
+};
+
+const recordTransactions = function(quotes) {
+  let noOfDays = 100;
+  let stockBought = false;
+  let transactions = [];
+  let buy;
+
+  for (let index = noOfDays; index < quotes.length; index++) {
+    const sma = quotes[index].sma;
+    const close = quotes[index].Close;
+    if (close > sma && !stockBought) {
+      stockBought = true;
+      buy = quotes[index];
+    }
+    if (close < sma && stockBought) {
+      stockBought = false;
+      transactions.push({ buy: buy, sell: quotes[index] });
+    }
+    if (index == quotes.length - 1) {
+      transactions.push({ buy: buy, sell: quotes[index] });
+    }
+  }
+  console.log(transactions);
+  createTable(transactions);
+};
+
 const main = () => {
   d3.csv("data/NSEI.csv", parseCompany).then(quotes => {
     init();
@@ -158,6 +240,7 @@ const main = () => {
     insertMovingDayAverage(quotes);
     updateQuotes(quotes, "Close");
     updateByPeriodAndOffset(quotes);
+    recordTransactions(quotes);
   });
 };
 

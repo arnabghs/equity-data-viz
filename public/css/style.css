@@ -36,3 +36,7 @@
 #range-label {
 	text-align: center;
 }
+
+table, thead, th, tr, td {
+	border: 1px solid black;
+}
